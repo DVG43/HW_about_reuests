@@ -1,18 +1,33 @@
 
 from pprint import pprint
-
+#
 import requests
+#
+# Нужно определить кто самый умный(intelligence) из трех супергероев- Hulk, Captain America, Thanos.
+# Для определения id нужно использовать метод /search/name
 
-def test_request ():
-    url = "https://httpbin.org/get"
-    response = requests.get(url)
-    pprint(response)
+# забирпаем информацию из файлов. Получаем три словаря.
+# из трехсловарей получаем  значение intelligence
+# иыбираем максимальое значени и определяем супергероя.
+
+
+
+def get_poverstats ():
+        url = f"https://superheroapi.com/api/2619421814940190/character-'Hulk'/powerstats"
+        response = requests.get(url, params={'poverstats': 'meaning'})
+        return response.json()
+
+# def test_request ():
+#      url = "https://httpbin.org/get"
+#      response = requests.get(url)
+#      pprint(response)
 
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-     test_request()
+     name_hero_1 = 'Hulk'
+     print (get_poverstats(name_hero_1))
 
 
 
