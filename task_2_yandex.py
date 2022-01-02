@@ -22,16 +22,46 @@ class YaUploader:
 
     # def upload(self, file_path: str):
     #     """Метод загружает файлы по списку file_list на яндекс диск"""
-    #     # Тут ваша логика
-    #     # Функция может ничего не возвращать
+
+
+    def _get_upload_link(self, disk_file_path):
+        upload_url = "https://cloud-api.yandex.net/v1/disk/resources/upload"
+        headers = self.get_headers()
+        params = {"path": disk_file_path, "overwrite": "true"}
+        response = requests.get(upload_url, headers=headers, params=params)
+        pprint(response.json())
+        return response.json()
+
+    def upload_file_to_disk(self, disk_file_path, filename):
+        href = self._get_upload_link(disk_file_path=disk_file_path).get("href", "")
+        response = requests.put(href, data=open(filename, 'rb'))
+        response.raise_for_status()
+        if response.status_code == 201:
+            print("Success")
+
+
 
 
 if __name__ == '__main__':
     # Получить путь к загружаемому файлу и токен от пользователя
-    path_to_file = 'https://docviewer.yandex.ru/view/1537863710/v1/resourses/files'
+    path_to_file = 'https://cloud-api.yandex.net/v1/disk/resources/files'
     token = 'AQAAAABbqfAeAADLW0ZHggdGL0GIpWWHzWBa9gI'
     uploader = YaUploader(token)
     pprint(uploader.get_files_list(path_to_file))
+
+    putloader = YaUploader(token)
+    fail_list = ['new_tecst.txt','new_1.txt'] # по этому списку идет загрузка из текущей директории
+    for n_file in fail_list:
+        putloader.upload_file_to_disk(f"Netologi/{n_file}", f"{n_file}")
+
+
+
+
+
+
+
+
+
 
 # result = uploader.upload(path_to_file)
 
